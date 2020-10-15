@@ -15,9 +15,9 @@ When you have dozen of servers it becomes difficult to manage your authorized ke
 copy all your public keys to `~/.ssh/authorized_keys` on every server you want to login to. And
 what if you someday change your keys?
 
-It’s a good practice to use some kind of a centralized user management, usually an LDAP server.
-There you have user’s login, uid, e-mail, … and password. What if we could also store public SSH
-keys on LDAP server? With this utility it’s easy as pie.
+It's a good practice to use some kind of a centralized user management, usually an LDAP server.
+There you have user's login, uid, e-mail, ... and password. What if we could also store public SSH
+keys on LDAP server? With this utility it's easy as pie.
 
 
 Alternatives
@@ -37,7 +37,7 @@ Requirements
 * [docopt]
 
 You can install both Python modules from PyPI.
-pyldap (and python-ldap) requires additional system dependencies – OpenLDAP.
+pyldap (and python-ldap) requires additional system dependencies - OpenLDAP.
 Refer to [Stack Overflow](http://stackoverflow.com/q/4768446/240963) for distribution-specific information.
 
 
@@ -90,7 +90,7 @@ Show help for other options:
 Configuration
 -------------
 
-Configuration is read from /etc/ldap.conf — file used by LDAP nameservice switch library and the
+Configuration is read from /etc/ldap.conf - file used by LDAP nameservice switch library and the
 LDAP PAM module. An example file is included in [etc/ldap.conf][ldap.conf]. The following subset of
 parameters are used:
 
@@ -100,22 +100,22 @@ parameters are used:
 *  **base** ... distinguished name (DN) of the search base. Used when *nss_base_passwd* is not set.
 *  **scope** ... search scope; _sub_, _one_, or _base_ (default is _sub_).
 *  **referrals** ... should client automatically follow referrals returned by LDAP servers (default is _on_)?
-*  **pam_filter** ... filter to use when searching for the user’s entry, additional to the login
+*  **pam_filter** ... filter to use when searching for the user's entry, additional to the login
         attribute value assertion (`pam_login_attribute=<login>`). Default is
         _objectclass=posixAccount_.
 *  **pam_login_attribute** ... the user ID attribute (default is _uid_).
 *  **ldap_version** ... LDAP version to use (default is 3).
 *  **sasl** ... enable SASL and specify mechanism to use (currently only GSSAPI is supported).
-*  **binddn** ... distinguished name (DN) to bind when reading the user’s entry (default is to bind
+*  **binddn** ... distinguished name (DN) to bind when reading the user's entry (default is to bind
                   anonymously).
-*  **bindpw** ... credentials to bind with when reading the user’s entry (default is none).
+*  **bindpw** ... credentials to bind with when reading the user's entry (default is none).
 *  **ssl** ... LDAP SSL/TLS method; _off_, _on_, or _start_tls_. If you use LDAP over SSL (i.e. URI `ldaps://`), leave this empty.
 *  **timelimit** ... search time limit in seconds (default is 10).
 *  **bind_timelimit** ... bind/connect time limit in seconds (default is 10). If multiple URIs are
                           specified in _uri_, then the next one is tried after this timeout.
 *  **tls_cacertdir** ... path of the directory with CA certificates for LDAP server certificate
                          verification.
-*  **pubkey_class** ... objectClass that should be added/removed to/from the user’s entry when adding/removing first/last public key and the *pubkey_attr* is mandatory for this class.
+*  **pubkey_class** ... objectClass that should be added/removed to/from the user's entry when adding/removing first/last public key and the *pubkey_attr* is mandatory for this class.
    This is needed for the original openssh-lpk.schema (not for the one in this repository).
    Default is `ldapPublicKey`.
 *  **pubkey_attr** ... name of LDAP attribute used for SSH public keys (default is `sshPublicKey`).
@@ -130,7 +130,7 @@ For more information about these parameters refer to ldap.conf man page.
 Setup OpenSSH server
 --------------------
 
-To configure OpenSSH server to fetch users’ authorized keys from LDAP server:
+To configure OpenSSH server to fetch users' authorized keys from LDAP server:
 
 1.  Make sure that you have installed **ssh-ldap-pubkey** and **ssh-ldap-pubkey-wrapper** in
     `/usr/bin` with owner `root` and mode `0755`.
@@ -139,19 +139,19 @@ To configure OpenSSH server to fetch users’ authorized keys from LDAP server:
         AuthorizedKeysCommand /usr/bin/ssh-ldap-pubkey-wrapper
         AuthorizedKeysCommandUser nobody
 
-3.  Restart sshd and check log file if there’s no problem.
+3.  Restart sshd and check log file if there's no problem.
 
 Note: This method is supported by OpenSSH since version 6.2-p1 (or 5.3 onRedHat). If you have an
-older version and can’t upgrade, for whatever weird reason, use [openssh-lpk] patch instead.
+older version and can't upgrade, for whatever weird reason, use [openssh-lpk] patch instead.
 
 
 Setup LDAP server
 ------------------
 
 Just add the [openssh-lpk.schema] to your LDAP server, **or** add an attribute named `sshPublicKey`
-to any existing schema which is already defined in people entries. That’s all.
+to any existing schema which is already defined in people entries. That's all.
 
-Note: Presumably, you’ve already setup your LDAP server for centralized unix users management,
+Note: Presumably, you've already setup your LDAP server for centralized unix users management,
 i.e. you have the [NIS schema](http://www.zytrax.com/books/ldap/ape/nis.html) and users in LDAP.
 
 
